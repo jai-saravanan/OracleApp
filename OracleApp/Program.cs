@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using OracleApp.Database;
+using OracleApp.Service.Implementation;
+using OracleApp.Service.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +15,8 @@ builder.Services.AddDbContext<FileServerDbContext>(options =>
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IFileInfoService, FileInfoService>();
 
 var app = builder.Build();
 

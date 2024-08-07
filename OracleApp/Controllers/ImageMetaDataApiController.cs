@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OracleApp.DTO;
+using OracleApp.Service.Interface;
 
 namespace OracleApp.Controllers
 {
@@ -9,12 +10,15 @@ namespace OracleApp.Controllers
     public class ImageMetaDataApiController : ControllerBase
     {
         private readonly ILogger<ImageMetaDataApiController> _logger;
+        private readonly IFileInfoService _fileInfoService;
+
         private const String MetaDataFileExt = ".txt";
         private const String PdfExt = ".pdf";
         private const Char InputAgentFiledSeparator = '|';
-        public ImageMetaDataApiController(ILogger<ImageMetaDataApiController> logger)
+        public ImageMetaDataApiController(ILogger<ImageMetaDataApiController> logger, IFileInfoService fileInfoService)
         {
             _logger = logger;
+            _fileInfoService = fileInfoService;
         }
 
         [HttpPost(Name = "Create")]
@@ -25,6 +29,9 @@ namespace OracleApp.Controllers
                                       String fileType, String fileSize, DateTime receivedDate, String message,
                                       String otherData, String url, String docCategory, String macId, String batchName)
         {
+            // DB Insert
+            await _fileInfoService.SaveFileInformation(filePath, caseNumber);
+
             _logger.LogInformation($"{nameof(Create)} for file {filePath} begins.");
             var result = CreateLocalMethod(appInfo, customPrefix, dateStringFormat, filePath, caseNumber, masNumber,
                                         docType, scanDate, status, documentId, controlNumber, scanOperator, externalId,
