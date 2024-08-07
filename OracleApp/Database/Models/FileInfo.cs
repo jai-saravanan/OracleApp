@@ -10,5 +10,7 @@ namespace OracleApp.Database.Models
         public Guid Id { get; set; }
 
         public string FilePath { get; set; }
+
+        public string CaseNumber { get; set; }
     }
 }
