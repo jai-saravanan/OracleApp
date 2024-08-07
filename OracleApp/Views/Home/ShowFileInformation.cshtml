@@ -1,0 +1,38 @@
+﻿@model IEnumerable<OracleApp.Database.Models.FileInformation>
+
+@{
+    ViewData["Title"] = "File Information";
+}
+
+<h1>File Information</h1>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                File Path
+            </th>
+            <th>
+                Case Number
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FilePath)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CaseNumber)
+            </td>
+            @* <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td> *@
+        </tr>
+}
+    </tbody>
+</table>
