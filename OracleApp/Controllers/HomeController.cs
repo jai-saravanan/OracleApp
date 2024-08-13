@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using OracleApp.Models;
 using OracleApp.Service.Interface;
 using System.Diagnostics;
@@ -35,8 +36,21 @@ namespace OracleApp.Controllers
         [HttpGet]
         public async Task<IActionResult> ShowFileInformation()
         {
-            var fileInfo = await _fileInfoService.GetAllFileInformation();
-            return View(fileInfo);
+            return View();
         }
+
+        [HttpPost]
+        public async Task<JsonResult> GetFilesInfo([FromBody] SearchFilter searchFilter)
+        {
+            var result = await _fileInfoService.GetAllFileInformation();
+            var filteredResult =  result.Where(x => x.CaseNumber.Contains(searchFilter.GlobalSearchValue)).ToList();
+            return Json(new { draw = searchFilter.Draw, recordsFiltered = filteredResult.Count, recordsTotal = filteredResult.Count, data = filteredResult });
+        }
+    }
+
+    public class SearchFilter
+    {
+        public string GlobalSearchValue { get; set; }
+        public int Draw { get; set; }
     }
 }

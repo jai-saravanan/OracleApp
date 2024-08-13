@@ -7,32 +7,45 @@
 <h1>File Information</h1>
 
 
-<table class="table">
+<table id="tblFilesInfo" class="table-bordered" cellpadding="0" cellspacing="0" border="1" style="border-collapse:collapse">
     <thead>
         <tr>
-            <th>
-                File Path
-            </th>
-            <th>
-                Case Number
-            </th>
+            <th>Id</th>
+            <th>FilePath</th>
+            <th>CaseNumber</th>
         </tr>
     </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FilePath)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CaseNumber)
-            </td>
-            @* <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td> *@
-        </tr>
-}
-    </tbody>
+    <tbody></tbody>
 </table>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/2.1.3/css/dataTables.dataTables.css" />
+<script src="https://cdn.datatables.net/2.1.3/js/dataTables.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#tblFilesInfo").DataTable(
+            {
+                processing: true,
+                serverSide: true,
+                ordering: false,
+                ajax: {
+                    url: 'https://localhost:7272/home/GetFilesInfo',
+                    type: "POST",
+                    contentType: "application/json",
+                    data: function (d) {
+                        debugger
+                        return JSON.stringify({
+                            draw: d.draw,  // Include the draw parameter
+                            start: d.start,
+                            length: d.length,
+                            globalSearchValue: d.search.value  // Capture the global search value
+                        });
+                    }
+                },
+                columns: [{ 'data': 'id', "searchable": false },
+                { 'data': 'filePath', "searchable": false },
+                { 'data': 'caseNumber', "searchable": true }]
+            });
+
+    });
+
+</script>
