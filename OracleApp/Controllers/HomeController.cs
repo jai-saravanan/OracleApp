@@ -44,7 +44,9 @@ namespace OracleApp.Controllers
         {
             var result = await _fileInfoService.GetAllFileInformation();
             var filteredResult =  result.Where(x => x.CaseNumber.Contains(searchFilter.GlobalSearchValue)).ToList();
-            return Json(new { draw = searchFilter.Draw, recordsFiltered = filteredResult.Count, recordsTotal = filteredResult.Count, data = filteredResult });
+
+            var paginationResult = filteredResult.Skip(searchFilter.Start).Take(searchFilter.Length).ToList();
+            return Json(new { draw = searchFilter.Draw, recordsFiltered = filteredResult.Count, recordsTotal = filteredResult.Count, data = paginationResult });
         }
     }
 
@@ -52,5 +54,8 @@ namespace OracleApp.Controllers
     {
         public string GlobalSearchValue { get; set; }
         public int Draw { get; set; }
+        public int Start { get; set; }
+
+        public int Length { get; set; }
     }
 }
